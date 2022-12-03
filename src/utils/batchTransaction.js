@@ -1,4 +1,4 @@
-const batchTransaction = async (txnArray, wallet) => {
+export const batchTransaction = async (txnArray, wallet) => {
   try {
     console.log("Batching transactions");
 

@@ -1,37 +1,70 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import { ethers } from "ethers";
 import Card from "./Card";
 import Stepper from "./Stepper";
 
+import { CurrencyAmount, Token, TradeType } from "@uniswap/sdk-core";
+import { AlphaRouter } from "@uniswap/smart-order-router";
+
+import { useWeb3AuthContext } from "../biconomy/contexts/SocialLoginContext";
+import { useSmartAccountContext } from "../biconomy/contexts/SmartAccountContext";
+
+import { configInfo as config } from "../biconomy/utils";
+
+const steps = [
+  {
+    name: "AAVE",
+    description: "Buy Flash Loan",
+    status: "complete",
+    method: "Borrow",
+    token: "USDC",
+    amount: 1000,
+    logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
+  },
+  {
+    name: "UniSwap",
+    description: "Swap your currency",
+    status: "current",
+    method: "Swap",
+    token: "USDC",
+    amount: 1000,
+    logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
+  },
+  {
+    name: "AAVE",
+    description: "Repay the Loan",
+    method: "Repay",
+    token: "USDC",
+    amount: 1000,
+    logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
+  },
+];
+
 function Home() {
-  const steps = [
-    {
-      name: 'AAVE',
-      description: 'Buy Flash Loan',
-      status: 'complete',
-      method: "Borrow",
-      token: "USDC",
-      amount: 1000,
-      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
-    },
-    {
-      name: 'UniSwap',
-      description: 'Swap your currency',
-      status: 'current',
-      method: "Swap",
-      token: "USDC",
-      amount: 1000,
-      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
-    },
-    {
-      name: 'AAVE',
-      description: 'Repay the Loan',
-      method: "Repay",
-      token: "USDC",
-      amount: 1000,
-      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
-    },
-  ]
+  const { provider, web3Provider } = useWeb3AuthContext();
+  const { state: walletState, wallet } = useSmartAccountContext();
+
+  const [txnArray, setTxnArray] = useState([]);
+
+  useEffect(() => {
+    onExecute();
+  }, []);
+
+  const onExecute = async () => {
+    console.log("Execute");
+
+    const txs = [];
+
+    // b0rrow
+
+    // approve transaction
+
+    // swaps
+
+    // repay
+
+    // batch transaction
+  };
 
   return (
     <>
@@ -40,6 +73,7 @@ function Home() {
           <div className="flex flex-col items-center mt-3 text-center tails-selected-element">
             <span className="relative inline-flex w-full md:w-auto">
               <a
+                onClick={onExecute}
                 href="#_"
                 type="button"
                 className="inline-flex items-center justify-center w-full px-6 py-2 text-base font-bold leading-6 text-white bg-purple-600 border border-transparent rounded-md md:w-auto hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
