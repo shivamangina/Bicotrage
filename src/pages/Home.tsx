@@ -71,7 +71,7 @@ function Home() {
       ],
     },
     {
-      exchange: "Uniswap",
+      exchange: "UniSwap",
       methods: [
         {
           description: "Swap your currency",
@@ -115,15 +115,6 @@ function Home() {
     if (!wallet) return;
     try {
       const txs = [];
-
-      // approve transaction
-      const firstStep = steps[0];
-      const keyOfToken = tokens.find((tok: any) => tok.symbol === firstStep.token).key
-
-      const txAppApprove = await approveTransaction(web3Provider, keyOfToken, firstStep.amount, 18);
-      console.log("txAppApprove: ", txAppApprove);
-      txs.push(txAppApprove);
-
       // swaps
       const exchangeTxns = await exchangeTransactions(wallet);
       console.log(exchangeTxns, "exchangeTxns");
@@ -148,34 +139,48 @@ function Home() {
     for (let i = 0; i < stepsBatch.length; i++) {
       const batch = stepsBatch[i];
       if (batch && batch.name === "UniSwap") {
-        console.log("UniSwap Adding batch Txn", batch);
         const tokenFromSwap = await findTokenBySymbol(batch.fromToken);
         const tokenToSwap = await findTokenBySymbol(batch.toToken);
+        console.log(tokenFromSwap, "tokenFromSwap");
+
+        // approve transaction
+        const txAppApprove = await approveTransaction(web3Provider, tokenFromSwap.key, batch.amount, tokenFromSwap.decimals);
+        console.log("txAppApprove: ", txAppApprove);
+        exchangeTxs.push(txAppApprove);
+
+        console.log("UniSwap Adding batch Txn", batch);
         const swapTx = await buildUniswapTransaction(web3Provider, wallet.address, tokenFromSwap, tokenToSwap, batch.amount.toString());
         console.log("swapTx: ", swapTx);
         exchangeTxs.push(swapTx);
       }
       if (batch && batch.name === "AAVE") {
         console.log("AAVE Adding batch Txn", batch.id);
-        // const swapTx = await buildUniswapTransaction(web3Provider, wallet.address, tokenJson.chainlink, tokenJson.dai, "1");
-        // console.log("swapTx: ", swapTx);
-        // return exchangeTxs.push(swapTx);
+        // Todo
+
       }
     }
     return exchangeTxs;
   }
 
   const addNewStep = (name: string, method: string, description: string) => {
-    const newStep = {
+    const newStep: any = {
       id: steps.length + 1,
       name,
       description,
       method,
       status: "",
-      token: "USDC",
       amount: "1",
-      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
     };
+    if (name === "UniSwap") {
+      newStep.fromToken = "DAI"
+      newStep.fromLogo = "https://assets-stg.transak.com/images/cryptoCurrency/dai_small.png"
+      newStep.toToken = "WETH"
+      newStep.toLogo = "https://assets-stg.transak.com/images/cryptoCurrency/weth_small.jpg"
+    }
+    if (name === "Aave") {
+      newStep.token = "WETH"
+      newStep.logo = "https://assets-stg.transak.com/images/cryptoCurrency/weth_small.jpg"
+    }
     setSteps([...steps, newStep]);
     setOpen(false);
   };
