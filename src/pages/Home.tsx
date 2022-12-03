@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { useEffect, useState, Fragment } from "react";
-
 import Card from "./Card";
 import Stepper from "./Stepper";
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import { PlusIcon } from '@heroicons/react/20/solid'
 import { RestRelayer } from "@biconomy/relayer";
 import { useWeb3AuthContext } from "../biconomy/contexts/SocialLoginContext";
@@ -28,7 +27,7 @@ function Home() {
       description: 'Swap your currency',
       status: 'current',
       method: "Swap",
-      token: "USDC",
+      token: "ETH",
       amount: 1000,
       logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
     },
@@ -37,10 +36,99 @@ function Home() {
       name: 'AAVE',
       description: 'Repay the Loan',
       method: "Repay",
-      token: "USDC",
+      token: "ETH",
       amount: 1000,
       logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
     },
+  ]
+
+  const initialTokens = [
+    {
+      "coinId": "ethereum",
+      "address": "0x0000000000000000000000000000000000000000",
+      "decimals": 18,
+      "image": {
+        "large": "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_large.png",
+        "small": "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png",
+        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_thumb.png"
+      },
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "network": {
+        "name": "ethereum",
+        "chainId": "5"
+      },
+      "uniqueId": "ETHethereum",
+    },
+    {
+      "coinId": "tether",
+      "address": "0x466DD1e48570FAA2E7f69B75139813e4F8EF75c2",
+      "decimals": 18,
+      "image": {
+        "large": "https://assets-stg.transak.com/images/cryptoCurrency/tether_large.png",
+        "small": "https://assets-stg.transak.com/images/cryptoCurrency/tether_small.png",
+        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/tether_thumb.png"
+      },
+      "name": "Tether",
+      "symbol": "USDT",
+      "network": {
+        "name": "polygon",
+        "chainId": "80001"
+      },
+      "uniqueId": "USDTpolygon",
+    },
+    {
+      "coinId": "usd-coin",
+      "address": "0xBC301D905Ccee51Dd9e7b60Bb807aCC69bD00913",
+      "decimals": 18,
+      "image": {
+        "large": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
+        "small": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
+        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_thumb.png"
+      },
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "network": {
+        "name": "polygon",
+        "chainId": "80001"
+      },
+      "uniqueId": "USDCpolygon",
+    },
+    {
+      "coinId": "usd-coin",
+      "address": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+      "decimals": 18,
+      "image": {
+        "large": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
+        "small": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
+        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_thumb.png"
+      },
+      "name": "USD Coin",
+      "symbol": "USDC",
+
+      "network": {
+        "name": "bsc",
+        "chainId": "97"
+      },
+      "uniqueId": "USDCbsc",
+    },
+    {
+      "coinId": "matic-network",
+      "address": "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0",
+      "decimals": 18,
+      "image": {
+        "large": "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_large.png",
+        "small": "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_small.png",
+        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_thumb.png"
+      },
+      "name": "Polygon",
+      "symbol": "MATIC",
+      "network": {
+        "name": "polygon",
+        "chainId": "80001"
+      },
+      "uniqueId": "MATICpolygon",
+    }
   ]
 
   const people = [
@@ -70,12 +158,12 @@ function Home() {
     }
 
   ]
+
   const [open, setOpen] = useState(false)
   const [steps, setSteps] = useState(initialSteps)
-
+  const [tokens, setTokens] = useState(initialTokens)
   const { provider, web3Provider } = useWeb3AuthContext();
   const { state: walletState, wallet } = useSmartAccountContext();
-
   const [txnArray, setTxnArray] = useState([]);
 
   useEffect(() => {
@@ -106,7 +194,6 @@ function Home() {
     // batch transaction
   };
 
-
   const addNewStep = (name: string, method: string, description: string) => {
     console.log("Add New Step");
     const newStep = {
@@ -129,91 +216,6 @@ function Home() {
     setOpen(true);
   };
 
-  const tokenList = [
-    {
-      "coinId": "ethereum",
-      "address": "0x0000000000000000000000000000000000000000",
-      "decimals": 18,
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_thumb.png"
-      },
-      "name": "Ethereum",
-      "symbol": "ETH",
-      "network": {
-        "name": "ethereum",
-        "chainId": "5"
-      },
-      "uniqueId": "ETHethereum",
-    },
-    {
-      "coinId": "tether",
-      "address": "0x466DD1e48570FAA2E7f69B75139813e4F8EF75c2",
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/tether_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/tether_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/tether_thumb.png"
-      },
-      "name": "Tether",
-      "symbol": "USDT",
-      "network": {
-        "name": "polygon",
-        "chainId": "80001"
-      },
-      "uniqueId": "USDTpolygon",
-    },
-    {
-      "coinId": "usd-coin",
-      "address": "0xBC301D905Ccee51Dd9e7b60Bb807aCC69bD00913",
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_thumb.png"
-      },
-      "name": "USD Coin",
-      "symbol": "USDC",
-      "network": {
-        "name": "polygon",
-        "chainId": "80001"
-      },
-      "uniqueId": "USDCpolygon",
-    },
-    {
-      "coinId": "usd-coin",
-      "address": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_thumb.png"
-      },
-      "name": "USD Coin",
-      "symbol": "USDC",
-
-      "network": {
-        "name": "bsc",
-        "chainId": "97"
-      },
-      "uniqueId": "USDCbsc",
-    },
-    {
-      "coinId": "matic-network",
-      "address": "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0",
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_thumb.png"
-      },
-      "name": "Polygon",
-      "symbol": "MATIC",
-      "network": {
-        "name": "polygon",
-        "chainId": "80001"
-      },
-      "uniqueId": "MATICpolygon",
-    }
-  ]
-
   return (
     <>
       <section className="px-2 bg-white md:px-0">
@@ -233,7 +235,7 @@ function Home() {
             <div className="container items-center">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 m-6">
                 <Stepper steps={steps} />
-                <Card steps={steps} tokens={tokenList} />
+                <Card steps={steps} tokens={tokens} />
               </div>
             </div>
           </div>

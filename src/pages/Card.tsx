@@ -31,11 +31,12 @@ export default function Example(data: any) {
                                             id="country"
                                             name="country"
                                             autoComplete="country-name"
+                                            value={step.token}
                                             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                         >
                                             {
                                                 tokens.map((token: any) => {
-                                                    return <option>{token.symbol}</option>
+                                                    return <option selected={step.token} >{token.symbol}</option>
                                                 })
                                             }
                                         </select>
