@@ -2,7 +2,7 @@
 import React from "react";
 
 export default function Example(data: any) {
-    const { steps } = data
+    const { steps, tokens } = data
     return (
         <ul role="list" className="grid grid-cols-1 gap-4 sm:grid-cols-1 mb-7">
             {steps.map((step: any) => (
@@ -22,7 +22,27 @@ export default function Example(data: any) {
                         <div className="container flex flex-col flex-wrap items-center justify-between  mx-auto md:flex-row ">
                             <p className="inline-flex items-center ml-1 space-x-5 text-sm text-gray-500 lg:justify-start">
                                 <img className="h-7 w-7 flex-shrink-0 rounded-full bg-gray-300 mr-2" src={step.logo} alt="" /> {""}
-                                {step.token}
+                                <div className="sm:col-span-3">
+                                    {/* <label htmlFor="country" className="block text-sm font-medium text-gray-700">
+                                        Country
+                                    </label> */}
+                                    <div className="mt-1">
+                                        <select
+                                            id="country"
+                                            name="country"
+                                            autoComplete="country-name"
+                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        >
+                                            {
+                                                tokens.map((token: any) => {
+                                                    return <option>{token.symbol}</option>
+                                                })
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+
                             </p>
                             <p className="inline-flex items-center ml-1 space-x-5 text-sm text-gray-500 lg:justify-end">
                                 {step.amount}
@@ -34,3 +54,4 @@ export default function Example(data: any) {
         </ul>
     )
 }
+
