@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React from "react";
-import { TrashIcon } from '@heroicons/react/20/solid'
+import { TrashIcon, ArrowsRightLeftIcon } from '@heroicons/react/20/solid'
 
 export default function Example(data: any) {
     const { steps, tokens, updateStepToken, updateStepAmount, deleteStep } = data
@@ -32,16 +32,15 @@ export default function Example(data: any) {
                     <div className="mt-2">
                         <div className="container flex flex-col flex-wrap items-center justify-between  mx-auto md:flex-row ">
                             <p className="inline-flex items-center ml-1 space-x-5 text-sm text-gray-500 lg:justify-start">
-                                <img className="h-7 w-7 flex-shrink-0 rounded-full bg-gray-300 mr-2" src={step.logo} alt="" /> {""}
+                                <img className="h-7 w-7 flex-shrink-0 rounded-full bg-gray-300 mr-2" src={step.name === "UniSwap" ? step.fromLogo : step.logo} alt="" /> {""}
                                 <div className="sm:col-span-3">
-
                                     <div className="mt-1">
                                         <select
                                             id="country"
                                             name="country"
                                             autoComplete="country-name"
-                                            onChange={(e) => updateStepToken(e?.target.value, step.id)}
-                                            value={step.token}
+                                            onChange={(e) => updateStepToken(e?.target.value, step.id, step.name === "UniSwap" ? true : false, "from")}
+                                            value={step.name === "UniSwap" ? step.fromToken : step.token}
                                             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                         >
                                             {
@@ -52,11 +51,32 @@ export default function Example(data: any) {
                                         </select>
                                     </div>
                                 </div>
-
-
+                                {step.name === "UniSwap" &&
+                                    <>
+                                        <ArrowsRightLeftIcon className="h-5 w-5" aria-hidden="true" />
+                                        <img className="h-7 w-7 flex-shrink-0 rounded-full bg-gray-300 mr-2" src={step.name === "UniSwap" ? step.toLogo : step.logo} alt="" /> {""}
+                                        <div className="sm:col-span-3">
+                                            <div className="mt-1">
+                                                <select
+                                                    id="country"
+                                                    name="country"
+                                                    autoComplete="country-name"
+                                                    onChange={(e) => updateStepToken(e?.target.value, step.id, step.name === "UniSwap" ? true : false, "to")}
+                                                    value={step.toToken}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                >
+                                                    {
+                                                        tokens.map((token: any) => {
+                                                            return <option selected={step.token}>{token.symbol}</option>
+                                                        })
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </>
+                                }
                             </p>
                             <p className="inline-flex items-center ml-1 space-x-5 text-sm text-gray-500 lg:justify-end">
-
                                 <div className="mt-1 flex rounded-md shadow-sm">
                                     <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
                                         $
@@ -66,7 +86,7 @@ export default function Example(data: any) {
                                         name="username"
                                         id="username"
                                         value={step.amount}
-                                        onChange={(e) => { updateStepAmount(Number(e.target.value), step.id) }}
+                                        onChange={(e) => { updateStepAmount(e.target.value, step.id) }}
                                         autoComplete="username"
                                         className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     />
