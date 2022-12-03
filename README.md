@@ -27,7 +27,7 @@ When it comes to arbitrage, a user must buy and sell crypto assets on multiple e
 
 ## Solution
 
-Our Arbitrage Platform is built with the **Biconomy SDK**, and we're solving the problem mentioned above with it.
+Our Arbitrage Platform is built with the **Biconomy SDK**, where we're helping the users to make a arbitage easily with few clicks and saving time and money.
 
 ### Features used from Biconomy:
 
