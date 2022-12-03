@@ -100,7 +100,7 @@ export const SmartAccountProvider = ({ children }: any) => {
         // bundlerUrl: 'http://localhost:3005/rpc',
         networkConfig: [
           {
-          chainId: ChainId.POLYGON_MUMBAI,
+          chainId: ChainId.GOERLI,
           dappAPIKey: '59fRCMXvk.8a1652f0-b522-4ea7-b296-98628499aee3',
           // if need to override // providerUrl: 
         },
