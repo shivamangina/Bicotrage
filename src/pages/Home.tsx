@@ -19,7 +19,7 @@ function Home() {
       method: "Borrow",
       token: "USDC",
       amount: 1000,
-      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
+      logo: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png"
     },
     {
       id: 2,
@@ -29,7 +29,7 @@ function Home() {
       method: "Swap",
       token: "ETH",
       amount: 1000,
-      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
+      logo: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png"
     },
     {
       id: 3,
@@ -38,7 +38,7 @@ function Home() {
       method: "Repay",
       token: "ETH",
       amount: 1000,
-      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
+      logo: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png"
     },
   ]
 
@@ -93,24 +93,6 @@ function Home() {
         "chainId": "80001"
       },
       "uniqueId": "USDCpolygon",
-    },
-    {
-      "coinId": "usd-coin",
-      "address": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
-      "decimals": 18,
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_thumb.png"
-      },
-      "name": "USD Coin",
-      "symbol": "USDC",
-
-      "network": {
-        "name": "bsc",
-        "chainId": "97"
-      },
-      "uniqueId": "USDCbsc",
     },
     {
       "coinId": "matic-network",
@@ -180,6 +162,7 @@ function Home() {
 
   const onExecute = async () => {
     console.log("Execute");
+    console.log(steps, "steps");
 
     const txs = [];
 
@@ -206,15 +189,37 @@ function Home() {
       amount: 1000,
       logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
     };
-    console.log(newStep, "newStep");
     setSteps([...steps, newStep])
-    // steps.push(newStep)
-    console.log(steps);
     setOpen(false)
   }
+
   const openModal = () => {
     setOpen(true);
   };
+
+  const updateStepToken = (token: string, id: number) => {
+    const selectedToken: any = tokens.find(tok => tok.symbol === token)
+    const newSteps: any = steps.map(one => {
+      if (one.id === id) {
+        one.token = selectedToken.symbol;
+        one.logo = selectedToken.image.small
+      }
+      return one
+    });
+    setSteps([...newSteps])
+    console.log(selectedToken, newSteps);
+
+  }
+
+  const updateStepAmount = (amount: number, id: number) => {
+    const newSteps: any = steps.map(one => {
+      if (one.id === id) {
+        one.amount = amount;
+      }
+      return one
+    });
+    setSteps([...newSteps])
+  }
 
   return (
     <>
@@ -235,7 +240,7 @@ function Home() {
             <div className="container items-center">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 m-6">
                 <Stepper steps={steps} />
-                <Card steps={steps} tokens={tokens} />
+                <Card steps={steps} tokens={tokens} updateStepToken={updateStepToken} updateStepAmount={updateStepAmount} />
               </div>
             </div>
           </div>

@@ -2,11 +2,11 @@
 import React from "react";
 
 export default function Example(data: any) {
-    const { steps, tokens } = data
+    const { steps, tokens, updateStepToken, updateStepAmount } = data
     return (
         <ul role="list" className="grid grid-cols-1 gap-4 sm:grid-cols-1 mb-7">
             {steps.map((step: any) => (
-                <li key={step.email} className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow">
+                <li key={step.id} className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow">
                     <div className="flex w-full items-center justify-between space-x-6 p-6 bg-blue">
                         <div className="flex-1 truncate">
                             <div className="flex items-center space-x-3">
@@ -23,20 +23,19 @@ export default function Example(data: any) {
                             <p className="inline-flex items-center ml-1 space-x-5 text-sm text-gray-500 lg:justify-start">
                                 <img className="h-7 w-7 flex-shrink-0 rounded-full bg-gray-300 mr-2" src={step.logo} alt="" /> {""}
                                 <div className="sm:col-span-3">
-                                    {/* <label htmlFor="country" className="block text-sm font-medium text-gray-700">
-                                        Country
-                                    </label> */}
+
                                     <div className="mt-1">
                                         <select
                                             id="country"
                                             name="country"
                                             autoComplete="country-name"
+                                            onChange={(e) => updateStepToken(e?.target.value, step.id)}
                                             value={step.token}
                                             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                         >
                                             {
                                                 tokens.map((token: any) => {
-                                                    return <option selected={step.token} >{token.symbol}</option>
+                                                    return <option selected={step.token}>{token.symbol}</option>
                                                 })
                                             }
                                         </select>
@@ -46,7 +45,21 @@ export default function Example(data: any) {
 
                             </p>
                             <p className="inline-flex items-center ml-1 space-x-5 text-sm text-gray-500 lg:justify-end">
-                                {step.amount}
+
+                                <div className="mt-1 flex rounded-md shadow-sm">
+                                    <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
+                                        $
+                                    </span>
+                                    <input
+                                        type="text"
+                                        name="username"
+                                        id="username"
+                                        value={step.amount}
+                                        onChange={(e) => { updateStepAmount(Number(e.target.value), step.id) }}
+                                        autoComplete="username"
+                                        className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    />
+                                </div>
                             </p>
                         </div>
                     </div>
