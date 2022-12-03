@@ -4,7 +4,7 @@
     "address": "0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60",
     "name": "Dai",
     "symbol": "DAI",
-    "decimals": 18,
+    "decimal": 18,
     "image": {
       "large": "https://assets-stg.transak.com/images/cryptoCurrency/dai_large.png",
       "small": "https://assets-stg.transak.com/images/cryptoCurrency/dai_small.png",
@@ -577,7 +577,7 @@
   },
   "weth": {
     "coinId": "weth",
-    "decimals": 18,
+    "decimal": 18,
     "image": {
       "large": "https://assets-stg.transak.com/images/cryptoCurrency/weth_large.jpg",
       "small": "https://assets-stg.transak.com/images/cryptoCurrency/weth_small.jpg",
@@ -1154,7 +1154,7 @@
   "usdc": {
     "coinId": "usd-coin",
     "address": "0xdA5289fCAAF71d52a80A254da614a192b693e977",
-    "decimals": 6,
+    "decimal": 6,
     "image": {
       "large": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
       "small": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
@@ -1729,7 +1729,7 @@
   },
   "uniswap": {
     "coinId": "uniswap",
-    "decimals": 18,
+    "decimal": 18,
     "image": {
       "large": "https://assets-stg.transak.com/images/cryptoCurrency/uniswap_large.png",
       "small": "https://assets-stg.transak.com/images/cryptoCurrency/uniswap_small.png",
@@ -2308,7 +2308,7 @@
     "name": "ChainLink Token",
     "symbol": "LINK",
     "uniqueId": "LINKethereum",
-    "decimals": 18,
+    "decimal": 18,
     "address": "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
     "image": {
       "small": "https://assets.coingecko.com/coins/images/877/thumb/chainlink-new-logo.png?1547034700"

@@ -105,29 +105,23 @@ function Home() {
 
   const onExecute = async () => {
     console.log("Execute");
-    console.log(steps, "steps");
 
     if (!wallet) return;
 
     const txs = [];
 
-    // b0rrow
-
     // approve transaction
-    const txAppApprove = await approveTransaction(web3Provider, "chainlink", "2");
-    console.log('txAppApprove: ', txAppApprove);
+    const txAppApprove = await approveTransaction(web3Provider, "chainlink", "1" , 18);
+    console.log("txAppApprove: ", txAppApprove);
     txs.push(txAppApprove);
 
     // swaps
-    const swapTx = await buildUniswapTransaction(web3Provider, wallet.address, "chainlink", "dai", "2");
-    console.log('swapTx: ', swapTx);
+    const swapTx = await buildUniswapTransaction(web3Provider, wallet.address, tokensJson.chainlink, tokenJson.dai, "1");
+    console.log("swapTx: ", swapTx);
     txs.push(swapTx);
-
-    // repay
 
     // batch transaction
     const txHash = await batchTransaction(txs, wallet);
-    console.log('txHash: ', txHash);
     console.log("txHash: ", txHash);
   };
 
@@ -175,7 +169,10 @@ function Home() {
 
   const deleteStep = (id: number) => {
     let newSteps = steps;
-    newSteps.splice(newSteps.findIndex(a => a.id === id), 1)
+    newSteps.splice(
+      newSteps.findIndex((a) => a.id === id),
+      1,
+    );
     setSteps([...newSteps]);
   };
 
@@ -311,6 +308,4 @@ function Home() {
 }
 
 export default Home;
-function swapTransaction(web3Provider: import("@ethersproject/providers").Web3Provider | null, arg1: string, arg2: string, arg3: string) {
-  throw new Error("Function not implemented.");
-}
+
