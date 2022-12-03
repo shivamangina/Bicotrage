@@ -181,17 +181,21 @@ function Home() {
     // b0rrow
 
     // approve transaction
-    const txAppApprove = approveTransaction(web3Provider, "chainlink", "2");
+    const txAppApprove = await approveTransaction(web3Provider, "chainlink", "2");
+    console.log('txAppApprove: ', txAppApprove);
     txs.push(txAppApprove);
 
     // swaps
-    const swapTx = buildUniswapTransaction(web3Provider, wallet.address, "chainlink", "dai", "2");
+    const swapTx = await buildUniswapTransaction(web3Provider, wallet.address, "chainlink", "dai", "2");
+    console.log('swapTx: ', swapTx);
     txs.push(swapTx);
 
     // repay
 
     // batch transaction
-
+    const txHash = await batchTransaction(txs, wallet);
+    console.log('txHash: ', txHash);
+    console.log("txHash: ", txHash);
   };
 
   const addNewStep = (name: string, method: string, description: string) => {

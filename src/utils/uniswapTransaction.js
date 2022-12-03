@@ -9,11 +9,12 @@ const V3_SWAP_ROUTER_ADDRESS = "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45";
 export const buildUniswapTransaction = async (web3Provider, recipient, token1config, token2config, amount) => {
   const router = new AlphaRouter({ chainId: 5, provider: web3Provider });
 
-  const token1 = new Token(5, "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6", 18, "WETH", "Wrapped Ether");
+  const token1 = new Token(5, "0x326C977E6efc84E512bB9C30f76E30c160eD06FB", 18, "LINK", "Chainlink Token");
 
   const token2 = new Token(5, "0xb5B640E6414b6DeF4FC9B3C1EeF373925effeCcF", 6, "USDC", "USD//C");
 
-  const token1Amount = CurrencyAmount.fromRawAmount(token1, JSBI.BigInt(amount)); 
+  const token1Amount = CurrencyAmount.fromRawAmount(token1, JSBI.BigInt("1000000000000000000"));
+  console.log('token1Amount: ', token1Amount);
 
   const route = await router.route(token1Amount, token2, TradeType.EXACT_INPUT, {
     recipient: recipient,
