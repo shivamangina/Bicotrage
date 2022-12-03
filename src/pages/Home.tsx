@@ -1,71 +1,62 @@
-import React, { useEffect, useState, Fragment } from 'react'
+import React, { useEffect, useState, Fragment } from "react";
 import { RestRelayer } from "@biconomy/relayer";
-import Card from './Card'
-import Stepper from './Stepper'
-import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import AddStep from './AddStep'
+import Card from "./Card";
+import Stepper from "./Stepper";
+import { Dialog, Transition } from "@headlessui/react";
+import { ExclamationTriangleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import AddStep from "./AddStep";
 
-import { CurrencyAmount, Token, TradeType } from '@uniswap/sdk-core'
-import { AlphaRouter } from '@uniswap/smart-order-router'
-
-import { useWeb3AuthContext } from '../biconomy/contexts/SocialLoginContext'
-import { useSmartAccountContext } from '../biconomy/contexts/SmartAccountContext'
-
-import { configInfo as config } from '../biconomy/utils'
+import { useWeb3AuthContext } from "../biconomy/contexts/SocialLoginContext";
+import { useSmartAccountContext } from "../biconomy/contexts/SmartAccountContext";
 
 const steps = [
   {
-    name: 'AAVE',
-    description: 'Buy Flash Loan',
-    status: 'complete',
-    method: 'Borrow',
-    token: 'USDC',
+    name: "AAVE",
+    description: "Buy Flash Loan",
+    status: "complete",
+    method: "Borrow",
+    token: "USDC",
     amount: 1000,
-    logo:
-      'https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389',
+    logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
   },
   {
-    name: 'UniSwap',
-    description: 'Swap your currency',
-    status: 'current',
-    method: 'Swap',
-    token: 'USDC',
+    name: "UniSwap",
+    description: "Swap your currency",
+    status: "current",
+    method: "Swap",
+    token: "USDC",
     amount: 1000,
-    logo:
-      'https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389',
+    logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
   },
   {
-    name: 'AAVE',
-    description: 'Repay the Loan',
-    method: 'Repay',
-    token: 'USDC',
+    name: "AAVE",
+    description: "Repay the Loan",
+    method: "Repay",
+    token: "USDC",
     amount: 1000,
-    logo:
-      'https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389',
+    logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
   },
-]
+];
 
 function Home() {
-  const { provider, web3Provider } = useWeb3AuthContext()
-  const { state: walletState, wallet } = useSmartAccountContext()
+  const { provider, web3Provider } = useWeb3AuthContext();
+  const { state: walletState, wallet } = useSmartAccountContext();
 
-  const [txnArray, setTxnArray] = useState([])
+  const [txnArray, setTxnArray] = useState([]);
 
   useEffect(() => {
-    onExecute()
-  }, [])
+    onExecute();
+  }, []);
 
   const onExecute = async () => {
-    console.log('Execute')
+    console.log("Execute");
     const relayer = new RestRelayer({
-      url: 'https://sdk-relayer.staging.biconomy.io/api/v1/relay',
-      socketServerUrl:
-        'wss://sdk-testing-ws.staging.biconomy.io/connection/websocket',
-    })
-    wallet.setRelayer(relayer)
+      url: "https://sdk-relayer.staging.biconomy.io/api/v1/relay",
+      socketServerUrl: "wss://sdk-testing-ws.staging.biconomy.io/connection/websocket",
+    });
+    wallet.setRelayer(relayer);
 
-    const txs = []
+    const txs = [];
 
     // b0rrow
 
@@ -76,13 +67,13 @@ function Home() {
     // repay
 
     // batch transaction
-  }
+  };
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   const openModal = () => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
 
   return (
     <>
@@ -93,8 +84,7 @@ function Home() {
               <button
                 onClick={openModal}
                 type="button"
-                className="inline-flex items-center justify-center w-full px-6 py-2 text-base font-bold leading-6 text-white bg-purple-600 border border-transparent rounded-md md:w-auto hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
-              >
+                className="inline-flex items-center justify-center w-full px-6 py-2 text-base font-bold leading-6 text-white bg-purple-600 border border-transparent rounded-md md:w-auto hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
                 Add Step
               </button>
             </span>
@@ -118,8 +108,7 @@ function Home() {
                 enterTo="opacity-100"
                 leave="ease-in duration-200"
                 leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
+                leaveTo="opacity-0">
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
               </Transition.Child>
 
@@ -132,15 +121,13 @@ function Home() {
                     enterTo="opacity-100 translate-y-0 sm:scale-100"
                     leave="ease-in duration-200"
                     leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                  >
+                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
                     <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                       <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
                         <button
                           type="button"
                           className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                          onClick={() => setOpen(false)}
-                        >
+                          onClick={() => setOpen(false)}>
                           <span className="sr-only">Close</span>
                           <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                         </button>
@@ -155,7 +142,7 @@ function Home() {
         </div>
       </section>
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;
