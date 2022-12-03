@@ -1,7 +1,9 @@
 export const initialState = {
-  loading: true,
+  loading: false,
   provider: null,
   signer: null,
   accounts: null,
   Contract: null,
+  addWeb3ProviderToContext: Function,
+  setLoading: Function
 };

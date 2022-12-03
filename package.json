@@ -23,7 +23,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.4",
     "react-scripts": "5.0.1",
-    "react-toastify": "^9.0.8",
+    "react-toastify": "^9.1.1",
     "tls": "^0.0.1",
     "typescript": "^4.4.2",
     "walletlink": "^2.5.0",
@@ -58,6 +58,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-router-dom": "^5.3.3",
     "@uniswap/sdk-core": "^3.0.1",
     "@uniswap/smart-order-router": "^2.8.2",
     "@uniswap/v3-sdk": "^3.9.0",
