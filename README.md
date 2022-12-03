@@ -21,17 +21,28 @@ Video : <a style="margin-bottom: 5px;" href="https://github.com/shivamangina/eth
 
 ## Problem
 
+In web3 world, if one wants to interact with the ecosystem, he needs to create a wallet and pay a gas fee every time he uses the service. In both cases, the user interfaces are not friendly to non-crypto users.
+
+When it comes to arbitrage, a user must buy and sell crypto assets on multiple exchanges, swaps, etc. During these scenarios, the user will incur huge gas and time fees. Particularly in the crypto space, the market can deviate in a matter of seconds.
+
 ## Solution
+
+Our Arbitrage Platform is built with the **Biconomy SDK**, and we're solving the problem mentioned above with it.
+
+### Features used from Biconomy:
+
+1. Social Login System : By using this, any web2/web3 user can easily log in to the platform without any hassle.
+2. Transaction Batch : The Biconomy batch feature allows all trades across all dexes and swaps to be made together and can be processed as a single transaction.
+3. Gas less Transactions: Through this feature, users will no longer have to pay for gas fees during the flow.
 
 ## Stack We Used
 
 1. Frontend: We used **React JS**, Tailwind CSS for UI and **ethers** library to fetch details from contract.
 
 2. Blockchain :
-   1. Smart Contract: We used **Solidity** for writing smart contracts.
+   1. Biconomy: We used **Biconomy SDK** for features like social login, gas less transactions and transaction batches.
    2. Chain: **Ethereum Goerli** to connect with blockchain on testnet.
-   3. RPC URL : We used **Quick Node** polygon RPC url to connect to the mumbai chain.
-      <br>
+   3. RPC URL : We used **Quick Node** Ethereum RPC url to connect to the goerli chain.
 
 # Architecture
 
