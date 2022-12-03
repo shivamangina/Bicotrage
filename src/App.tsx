@@ -19,36 +19,7 @@ const App: React.FC = () => {
   console.log(address, "address");
   console.log(eoaWalletLoading, "eoaWalletLoading");
 
-
   // if (!address) connect();
-
-  if (!address) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          paddingTop: "30vh",
-        }}
-      >
-        <h1 >Biconomy SDK Demo</h1>
-        <button
-          title="Get Started"
-          onClick={connect}
-          // isLoading={eoaWalletLoading}
-          style={{
-            fontSize: 20,
-            padding: "30px 20px",
-            border: 0,
-            background:
-              "linear-gradient(90deg, #0063FF -2.21%, #9100FF 89.35%)",
-          }}
-        >Button</button>
-        <ToastContainer />
-      </div>
-    );
-  }
 
   return <>{loading ? <Loader /> : <Routing />}</>;
 

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { GlobalContext } from "../context/context";
 import { Link } from "react-router-dom";
+import { useWeb3AuthContext } from "../biconomy/contexts/SocialLoginContext";
 
 const paths = [
   {
@@ -11,6 +12,7 @@ const paths = [
 
 export default function Header() {
   const { accounts } = useContext(GlobalContext);
+  const { connect, address, loading: eoaWalletLoading, disconnect } = useWeb3AuthContext();
 
   return (
     <section className="w-full px-8 text-gray-700 bg-white">
@@ -33,15 +35,25 @@ export default function Header() {
           </nav>
         </div>
         <div className="inline-flex items-center ml-1 space-x-5 lg:justify-end">
-          {accounts && accounts.length > 0 && (
-            <span className="mr-2 font-medium leading-6 text-gray-600 hover:text-gray-900 bg-indigo-100">Connected to : {accounts[0]}</span>
-          )}
+
+          {/* {address && (
+            <span className="mr-2 font-medium leading-6 text-gray-600 hover:text-gray-900 bg-indigo-100">Connected to : {address}</span>
+          )} */}
 
           <button
-            disabled={accounts && accounts.length > 0 && accounts[0] ? true : false}
+            disabled={address ? true : false}
+            onClick={connect}
             className="inline-flex items-center justify-center px-2 py-1 text-base font-medium leading-6 text-white whitespace-no-wrap bg-yellow-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
-            {accounts && accounts.length > 0 && accounts[0] ? "Connected" : "Connect to wallet"}
+            {address ? address : "Connect to wallet"}
           </button>
+
+          {address &&
+            <button
+              onClick={disconnect}
+              className="flex items-center w-full px-6 py-1 mb-3 text-base leading-6 text-white bg-purple-600 rounded-md sm:mb-0 hover:bg-indigo-700 sm:w-auto">
+              Logout
+            </button>
+          }
         </div>
       </div>
     </section>
