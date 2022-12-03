@@ -15,7 +15,6 @@ import Config from "./Config";
 const App: React.FC = () => {
   const { loading, addWeb3ProviderToContext, setLoading } =
   useContext(GlobalContext);
-
   return <div>{loading ? <Loader /> : <Routing />}</div>;
 };
 
