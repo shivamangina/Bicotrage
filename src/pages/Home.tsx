@@ -22,7 +22,7 @@ function Home() {
       description: "Buy Flash Loan",
       status: "complete",
       method: "Borrow",
-      token: "USDC",
+      token: "LINK",
       amount: "1",
       logo: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
     },
@@ -32,7 +32,7 @@ function Home() {
       description: "Swap your currency",
       status: "current",
       method: "Swap",
-      fromToken: "USDC",
+      fromToken: "LINK",
       toToken: "DAI",
       amount: "1",
       fromLogo: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
@@ -50,7 +50,11 @@ function Home() {
   ];
 
   const tokenJson: any = tokensJson;
-  const initialTokens: any = Object.keys(tokenJson).map((key) => tokenJson[key]);
+  const initialTokens: any = Object.keys(tokenJson).map((key) => {
+    const item = tokenJson[key];
+    item.key = key
+    return item;
+  });
 
   const people = [
     {
@@ -108,24 +112,29 @@ function Home() {
 
   const onExecute = async () => {
     console.log("Execute");
-
     if (!wallet) return;
+    try {
+      const txs = [];
 
-    const txs = [];
+      // approve transaction
+      const firstStep = steps[0];
+      const keyOfToken = tokens.find((tok: any) => tok.symbol === firstStep.token).key
 
-    // approve transaction
-    const txAppApprove = await approveTransaction(web3Provider, "chainlink", "1", 18);
-    console.log("txAppApprove: ", txAppApprove);
-    txs.push(txAppApprove);
+      const txAppApprove = await approveTransaction(web3Provider, keyOfToken, firstStep.amount, 18);
+      console.log("txAppApprove: ", txAppApprove);
+      txs.push(txAppApprove);
 
-    // swaps
-    const exchangeTxns = await exchangeTransactions(wallet);
-    console.log(exchangeTxns, "exchangeTxns");
-    txs.push(exchangeTxns)
+      // swaps
+      const exchangeTxns = await exchangeTransactions(wallet);
+      console.log(exchangeTxns, "exchangeTxns");
+      txs.push(...exchangeTxns)
 
-    // batch transaction
-    const txHash = await batchTransaction(txs, wallet);
-    console.log("txHash: ", txHash);
+      // batch transaction
+      const txHash = await batchTransaction(txs, wallet);
+      console.log("txHash: ", txHash);
+    } catch (error) {
+      console.log(error, "error");
+    }
   };
 
   const findTokenBySymbol = async (symbol: string) => {
@@ -135,7 +144,7 @@ function Home() {
 
   const exchangeTransactions = async (wallet: SmartAccount) => {
     const stepsBatch: any = steps;
-    const exchangeTxs = [];
+    const exchangeTxs: any = [];
     for (let i = 0; i < stepsBatch.length; i++) {
       const batch = stepsBatch[i];
       if (batch && batch.name === "UniSwap") {
@@ -144,7 +153,7 @@ function Home() {
         const tokenToSwap = await findTokenBySymbol(batch.toToken);
         const swapTx = await buildUniswapTransaction(web3Provider, wallet.address, tokenFromSwap, tokenToSwap, batch.amount.toString());
         console.log("swapTx: ", swapTx);
-        return exchangeTxs.push(swapTx);
+        exchangeTxs.push(swapTx);
       }
       if (batch && batch.name === "AAVE") {
         console.log("AAVE Adding batch Txn", batch.id);
@@ -153,6 +162,7 @@ function Home() {
         // return exchangeTxs.push(swapTx);
       }
     }
+    return exchangeTxs;
   }
 
   const addNewStep = (name: string, method: string, description: string) => {

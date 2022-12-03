@@ -3,7 +3,7 @@ export const batchTransaction = async (txnArray, wallet) => {
     console.log("Batching transactions");
 
     const feeQuotes = await wallet.prepareRefundTransactionBatch({
-      
+
       transactions: txnArray
     });
 
