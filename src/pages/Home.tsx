@@ -1,77 +1,74 @@
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { useEffect, useState, Fragment } from "react";
-
 import Card from "./Card";
 import Stepper from "./Stepper";
-import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { PlusIcon } from '@heroicons/react/20/solid'
+import { Dialog, Transition } from "@headlessui/react";
+import { ExclamationTriangleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/20/solid";
 import { RestRelayer } from "@biconomy/relayer";
 import { useWeb3AuthContext } from "../biconomy/contexts/SocialLoginContext";
 import { useSmartAccountContext } from "../biconomy/contexts/SmartAccountContext";
+import { approveTransaction } from "../utils/approveTransaction";
 
 function Home() {
   const initialSteps = [
     {
       id: 1,
-      name: 'AAVE',
-      description: 'Buy Flash Loan',
-      status: 'complete',
+      name: "AAVE",
+      description: "Buy Flash Loan",
+      status: "complete",
       method: "Borrow",
       token: "USDC",
       amount: 1000,
-      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
+      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
     },
     {
       id: 2,
-      name: 'UniSwap',
-      description: 'Swap your currency',
-      status: 'current',
+      name: "UniSwap",
+      description: "Swap your currency",
+      status: "current",
       method: "Swap",
       token: "USDC",
       amount: 1000,
-      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
+      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
     },
     {
       id: 3,
-      name: 'AAVE',
-      description: 'Repay the Loan',
+      name: "AAVE",
+      description: "Repay the Loan",
       method: "Repay",
       token: "USDC",
       amount: 1000,
-      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
+      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
     },
-  ]
+  ];
 
   const people = [
-
     {
       exchange: "AAVE",
       methods: [
         {
-          description: 'Buy Flash Loan',
+          description: "Buy Flash Loan",
           method: "Borrow",
-
         },
         {
-          description: 'Repay Flash Loan',
+          description: "Repay Flash Loan",
           method: "Repay",
         },
-      ]
+      ],
     },
     {
       exchange: "Uniswap",
       methods: [
         {
-          description: 'Swap your currency',
+          description: "Swap your currency",
           method: "Swap",
-        }
-      ]
-    }
-
-  ]
-  const [open, setOpen] = useState(false)
-  const [steps, setSteps] = useState(initialSteps)
+        },
+      ],
+    },
+  ];
+  const [open, setOpen] = useState(false);
+  const [steps, setSteps] = useState(initialSteps);
 
   const { provider, web3Provider } = useWeb3AuthContext();
   const { state: walletState, wallet } = useSmartAccountContext();
@@ -87,6 +84,14 @@ function Home() {
     if (wallet) {
       console.log("Relayer is set");
       wallet.setRelayer(relayer);
+
+      wallet.getAlltokenBalances({
+        chainId: 5, // chainId of your choice
+        eoaAddress: wallet.address,
+        tokenAddresses: ["0x0000000000000000000000000000000000000000","0x326C977E6efc84E512bB9C30f76E30c160eD06FB"],
+      }).then((balance) => {
+        console.log("balance", balance);
+      });
     }
   }, [wallet]);
 
@@ -98,6 +103,8 @@ function Home() {
     // b0rrow
 
     // approve transaction
+    approveTransaction(web3Provider,  )
+
 
     // swaps
 
@@ -105,7 +112,6 @@ function Home() {
 
     // batch transaction
   };
-
 
   const addNewStep = (name: string, method: string, description: string) => {
     console.log("Add New Step");
@@ -117,102 +123,102 @@ function Home() {
       status: "",
       token: "USDC",
       amount: 1000,
-      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
+      logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
     };
     console.log(newStep, "newStep");
-    setSteps([...steps, newStep])
+    setSteps([...steps, newStep]);
     // steps.push(newStep)
     console.log(steps);
-    setOpen(false)
-  }
+    setOpen(false);
+  };
   const openModal = () => {
     setOpen(true);
   };
 
   const tokenList = [
     {
-      "coinId": "ethereum",
-      "address": "0x0000000000000000000000000000000000000000",
-      "decimals": 18,
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_thumb.png"
+      coinId: "ethereum",
+      address: "0x0000000000000000000000000000000000000000",
+      decimals: 18,
+      image: {
+        large: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_large.png",
+        small: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png",
+        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_thumb.png",
       },
-      "name": "Ethereum",
-      "symbol": "ETH",
-      "network": {
-        "name": "ethereum",
-        "chainId": "5"
+      name: "Ethereum",
+      symbol: "ETH",
+      network: {
+        name: "ethereum",
+        chainId: "5",
       },
-      "uniqueId": "ETHethereum",
+      uniqueId: "ETHethereum",
     },
     {
-      "coinId": "tether",
-      "address": "0x466DD1e48570FAA2E7f69B75139813e4F8EF75c2",
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/tether_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/tether_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/tether_thumb.png"
+      coinId: "tether",
+      address: "0x466DD1e48570FAA2E7f69B75139813e4F8EF75c2",
+      image: {
+        large: "https://assets-stg.transak.com/images/cryptoCurrency/tether_large.png",
+        small: "https://assets-stg.transak.com/images/cryptoCurrency/tether_small.png",
+        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/tether_thumb.png",
       },
-      "name": "Tether",
-      "symbol": "USDT",
-      "network": {
-        "name": "polygon",
-        "chainId": "80001"
+      name: "Tether",
+      symbol: "USDT",
+      network: {
+        name: "polygon",
+        chainId: "80001",
       },
-      "uniqueId": "USDTpolygon",
+      uniqueId: "USDTpolygon",
     },
     {
-      "coinId": "usd-coin",
-      "address": "0xBC301D905Ccee51Dd9e7b60Bb807aCC69bD00913",
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_thumb.png"
+      coinId: "usd-coin",
+      address: "0xBC301D905Ccee51Dd9e7b60Bb807aCC69bD00913",
+      image: {
+        large: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
+        small: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
+        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_thumb.png",
       },
-      "name": "USD Coin",
-      "symbol": "USDC",
-      "network": {
-        "name": "polygon",
-        "chainId": "80001"
+      name: "USD Coin",
+      symbol: "USDC",
+      network: {
+        name: "polygon",
+        chainId: "80001",
       },
-      "uniqueId": "USDCpolygon",
+      uniqueId: "USDCpolygon",
     },
     {
-      "coinId": "usd-coin",
-      "address": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_thumb.png"
+      coinId: "usd-coin",
+      address: "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+      image: {
+        large: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
+        small: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
+        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_thumb.png",
       },
-      "name": "USD Coin",
-      "symbol": "USDC",
+      name: "USD Coin",
+      symbol: "USDC",
 
-      "network": {
-        "name": "bsc",
-        "chainId": "97"
+      network: {
+        name: "bsc",
+        chainId: "97",
       },
-      "uniqueId": "USDCbsc",
+      uniqueId: "USDCbsc",
     },
     {
-      "coinId": "matic-network",
-      "address": "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0",
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_thumb.png"
+      coinId: "matic-network",
+      address: "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0",
+      image: {
+        large: "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_large.png",
+        small: "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_small.png",
+        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_thumb.png",
       },
-      "name": "Polygon",
-      "symbol": "MATIC",
-      "network": {
-        "name": "polygon",
-        "chainId": "80001"
+      name: "Polygon",
+      symbol: "MATIC",
+      network: {
+        name: "polygon",
+        chainId: "80001",
       },
-      "uniqueId": "MATICpolygon",
-    }
-  ]
+      uniqueId: "MATICpolygon",
+    },
+  ];
 
   return (
     <>
@@ -300,7 +306,6 @@ function Home() {
                                 placeholder="Search for Any Exchange Or Method"
                               />
                             </div>
-
                           </form>
                         </div>
                         <div className="mt-10">
@@ -315,11 +320,9 @@ function Home() {
                                       <button
                                         type="button"
                                         onClick={() => addNewStep(person.exchange, methodObj.method, methodObj.description)}
-                                        className="group flex w-full items-center justify-between space-x-3 rounded-full border border-gray-300 p-2 text-left shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                      >
+                                        className="group flex w-full items-center justify-between space-x-3 rounded-full border border-gray-300 p-2 text-left shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                         <span className="flex min-w-0 flex-1 items-center space-x-3">
-                                          <span className="block flex-shrink-0">
-                                          </span>
+                                          <span className="block flex-shrink-0"></span>
                                           <span className="block min-w-0 flex-1">
                                             <span className="block truncate text-sm font-medium text-gray-900">{methodObj.method}</span>
                                           </span>
