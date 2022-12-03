@@ -7,6 +7,9 @@ import { Percent } from "@uniswap/sdk-core";
 const V3_SWAP_ROUTER_ADDRESS = "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45";
 
 export const buildUniswapTransaction = async (web3Provider, recipient, token1config, token2config, amount) => {
+    console.log('amount: ',typeof amount);
+    console.log('token2config: ', token2config);
+    console.log('token1config: ', token1config);
   const router = new AlphaRouter({ chainId: 5, provider: web3Provider });
 
   const token1 = new Token(5, token1config.address, token1config.decimal, token1config.symbol, token1config.name);
