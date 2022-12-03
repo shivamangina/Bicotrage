@@ -3,13 +3,16 @@ export const batchTransaction = async (txnArray, wallet) => {
     console.log("Batching transactions");
 
     const feeQuotes = await wallet.prepareRefundTransactionBatch({
+      
       transactions: txnArray
     });
+
+    console.log('feeQuotes: ', feeQuotes);
 
     // making transaction with version, set feeQuotes[1].tokenGasPrice = 6
     const transaction = await wallet.createRefundTransactionBatch({
       transactions: txnArray,
-      feeQuote: feeQuotes[1]
+      feeQuote: feeQuotes[0]
     });
 
     console.log("transaction", transaction);

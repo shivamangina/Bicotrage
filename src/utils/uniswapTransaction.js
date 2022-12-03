@@ -13,7 +13,7 @@ export const buildUniswapTransaction = async (web3Provider, recipient, token1con
 
   const token2 = new Token(5, "0xb5B640E6414b6DeF4FC9B3C1EeF373925effeCcF", 6, "USDC", "USD//C");
 
-  const token1Amount = CurrencyAmount.fromRawAmount(token1, JSBI.BigInt("1000000000000000000"));
+  const token1Amount = CurrencyAmount.fromRawAmount(token1, JSBI.BigInt("100000000000000000"));
   console.log('token1Amount: ', token1Amount);
 
   const route = await router.route(token1Amount, token2, TradeType.EXACT_INPUT, {
