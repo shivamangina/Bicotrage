@@ -1,62 +1,71 @@
-import React, { useEffect, useState,Fragment } from "react";
-import { ethers } from "ethers";
-import Card from "./Card";
-import Stepper from "./Stepper";
+import React, { useEffect, useState, Fragment } from 'react'
+import { RestRelayer } from "@biconomy/relayer";
+import Card from './Card'
+import Stepper from './Stepper'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import AddStep from "./AddStep"
+import AddStep from './AddStep'
 
-import { CurrencyAmount, Token, TradeType } from "@uniswap/sdk-core";
-import { AlphaRouter } from "@uniswap/smart-order-router";
+import { CurrencyAmount, Token, TradeType } from '@uniswap/sdk-core'
+import { AlphaRouter } from '@uniswap/smart-order-router'
 
-import { useWeb3AuthContext } from "../biconomy/contexts/SocialLoginContext";
-import { useSmartAccountContext } from "../biconomy/contexts/SmartAccountContext";
+import { useWeb3AuthContext } from '../biconomy/contexts/SocialLoginContext'
+import { useSmartAccountContext } from '../biconomy/contexts/SmartAccountContext'
 
-import { configInfo as config } from "../biconomy/utils";
+import { configInfo as config } from '../biconomy/utils'
 
 const steps = [
   {
-    name: "AAVE",
-    description: "Buy Flash Loan",
-    status: "complete",
-    method: "Borrow",
-    token: "USDC",
+    name: 'AAVE',
+    description: 'Buy Flash Loan',
+    status: 'complete',
+    method: 'Borrow',
+    token: 'USDC',
     amount: 1000,
-    logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
+    logo:
+      'https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389',
   },
   {
-    name: "UniSwap",
-    description: "Swap your currency",
-    status: "current",
-    method: "Swap",
-    token: "USDC",
+    name: 'UniSwap',
+    description: 'Swap your currency',
+    status: 'current',
+    method: 'Swap',
+    token: 'USDC',
     amount: 1000,
-    logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
+    logo:
+      'https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389',
   },
   {
-    name: "AAVE",
-    description: "Repay the Loan",
-    method: "Repay",
-    token: "USDC",
+    name: 'AAVE',
+    description: 'Repay the Loan',
+    method: 'Repay',
+    token: 'USDC',
     amount: 1000,
-    logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
+    logo:
+      'https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389',
   },
-];
+]
 
 function Home() {
-  const { provider, web3Provider } = useWeb3AuthContext();
-  const { state: walletState, wallet } = useSmartAccountContext();
+  const { provider, web3Provider } = useWeb3AuthContext()
+  const { state: walletState, wallet } = useSmartAccountContext()
 
-  const [txnArray, setTxnArray] = useState([]);
+  const [txnArray, setTxnArray] = useState([])
 
   useEffect(() => {
-    onExecute();
-  }, []);
+    onExecute()
+  }, [])
 
   const onExecute = async () => {
-    console.log("Execute");
+    console.log('Execute')
+    const relayer = new RestRelayer({
+      url: 'https://sdk-relayer.staging.biconomy.io/api/v1/relay',
+      socketServerUrl:
+        'wss://sdk-testing-ws.staging.biconomy.io/connection/websocket',
+    })
+    wallet.setRelayer(relayer)
 
-    const txs = [];
+    const txs = []
 
     // b0rrow
 
@@ -67,8 +76,8 @@ function Home() {
     // repay
 
     // batch transaction
-  };
- 
+  }
+
   const [open, setOpen] = useState(false)
 
   const openModal = () => {
@@ -146,7 +155,7 @@ function Home() {
         </div>
       </section>
     </>
-  );
+  )
 }
 
-export default Home;
+export default Home

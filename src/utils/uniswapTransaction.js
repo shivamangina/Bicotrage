@@ -1,38 +1,63 @@
 import { CurrencyAmount, Token, TradeType } from "@uniswap/sdk-core";
-import { RestRelayer } from "@biconomy/relayer";
+import { AlphaRouter } from "@uniswap/smart-order-router";
+import { ethers } from "ethers";
+import JSBI from "jsbi";
+import { Percent } from "@uniswap/sdk-core";
 
-export const buildUniswapTransaction = async (from, to, amount, gasPrice, gasLimit, data, nonce) => {
+const V3_SWAP_ROUTER_ADDRESS = "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45";
 
-    const ethersProvider = new ethers.providers.JsonRpcProvider(
-        "https://goerli.infura.io/v3/d126f392798444609246423b06116c77"
-      );
-      
-      
-      const router = new AlphaRouter({ chainId: 5, provider: ethersProvider });
-      
-      const WETH = new Token(
-        5,
-        "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
-        18,
-        "WETH",
-        "Wrapped Ether"
-      );
-      
-      const USDC = new Token(
-        5,
-        "0xb5B640E6414b6DeF4FC9B3C1EeF373925effeCcF",
-        6,
-        "USDC",
-        "USD//C"
-      );
+export const buildUniswapTransaction = async (wallet, recipient) => {
+  const ethersProvider = new ethers.providers.JsonRpcProvider(
+    "https://goerli.infura.io/v3/d126f392798444609246423b06116c77"
+  );
 
-      const relayer = new RestRelayer({
-        url: "https://sdk-relayer.staging.biconomy.io/api/v1/relay",
-        socketServerUrl:
-          "wss://sdk-testing-ws.staging.biconomy.io/connection/websocket",
-      });
+  const router = new AlphaRouter({ chainId: 5, provider: ethersProvider });
+
+  const WETH = new Token(
+    5,
+    "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
+    18,
+    "WETH",
+    "Wrapped Ether"
+  );
+
+  const USDC = new Token(
+    5,
+    "0xb5B640E6414b6DeF4FC9B3C1EeF373925effeCcF",
+    6,
+    "USDC",
+    "USD//C"
+  );
+
+  const typedValueParsed = "100000000000000";
+
+
+  const wethAmount = CurrencyAmount.fromRawAmount(
+    WETH,
+    JSBI.BigInt(typedValueParsed)
+  );
   
-      wallet.setRelayer(relayer);
-      
+  const route = await router.route(wethAmount, USDC, TradeType.EXACT_INPUT, {
+    recipient: recipient,
+    slippageTolerance: new Percent(5, 100),
+    deadline: Math.floor(Date.now() / 1000 + 1800),
+  });
+  console.log(`Quote Exact In: ${route?.quote.toFixed(2)}`);
+  console.log(`Gas Adjusted Quote In: ${route?.quoteGasAdjusted.toFixed(2)}`);
+  console.log(`Gas Used USD: ${route?.estimatedGasUsedUSD.toFixed(6)}`);
+  const uniswapTx = {
+    data: route?.methodParameters?.calldata,
+    to: V3_SWAP_ROUTER_ADDRESS,
+    value: ethers.BigNumber.from(route?.methodParameters?.value),
+    from: recipient,
+    gasPrice: ethers.BigNumber.from(route?.gasPriceWei),
+  };
+  console.log(uniswapTx);
 
-}
+  const tx2 = {
+    to: uniswapTx.to,
+    data: uniswapTx.data,
+  };
+
+  return tx2;
+};
