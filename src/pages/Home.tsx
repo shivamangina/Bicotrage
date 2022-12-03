@@ -9,6 +9,7 @@ import { RestRelayer } from "@biconomy/relayer";
 import { useWeb3AuthContext } from "../biconomy/contexts/SocialLoginContext";
 import { useSmartAccountContext } from "../biconomy/contexts/SmartAccountContext";
 import { approveTransaction } from "../utils/approveTransaction";
+import { uniswapTransaction } from "../utils/uniswapTransaction";
 
 function Home() {
   const initialSteps = [
@@ -176,7 +177,11 @@ function Home() {
     // b0rrow
 
     // approve transaction
-    approveTransaction(web3Provider,  )
+    const txAppApprove = approveTransaction(web3Provider,"chainlink","2");
+    txs.push(txAppApprove);
+
+    const swapTx = swapTransaction(web3Provider,"chainlink","2","0x326C977E6efc84E512bB9C30f76E30c160eD06FB");
+
 
 
     // swaps
@@ -362,3 +367,7 @@ function Home() {
 }
 
 export default Home;
+function swapTransaction(web3Provider: import("@ethersproject/providers").Web3Provider | null, arg1: string, arg2: string, arg3: string) {
+  throw new Error("Function not implemented.");
+}
+
