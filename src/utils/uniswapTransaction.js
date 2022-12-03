@@ -1,4 +1,4 @@
-import { CurrencyAmount, Token, TradeType, Fetcher, WETH } from "@uniswap/sdk-core";
+import { CurrencyAmount, Token, TradeType } from "@uniswap/sdk-core";
 import { AlphaRouter } from "@uniswap/smart-order-router";
 import { ethers } from "ethers";
 import JSBI from "jsbi";
@@ -12,12 +12,6 @@ export const buildUniswapTransaction = async (web3Provider, recipient, token1con
   const token1 = new Token(5, "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6", 18, "WETH", "Wrapped Ether");
 
   const token2 = new Token(5, "0xb5B640E6414b6DeF4FC9B3C1EeF373925effeCcF", 6, "USDC", "USD//C");
-
-  const dai = await Fetcher.fetchTokenData(5, token1config.address, web3Provider);
-  console.log("dai: ", dai);
-  const weth = WETH[5];
-  const pair = await Fetcher.fetchPairData(dai, weth, web3Provider);
-  console.log("pair: ", pair);
 
   const token1Amount = CurrencyAmount.fromRawAmount(token1, JSBI.BigInt(amount)); 
 
