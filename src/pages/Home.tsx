@@ -34,19 +34,21 @@ function Home() {
       method: "Swap",
       fromToken: "LINK",
       toToken: "DAI",
+      logo: null,
+      token: null,
       amount: "1",
       fromLogo: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
       toLogo: "https://assets-stg.transak.com/images/cryptoCurrency/dai_small.png",
     },
-    {
-      id: 3,
-      name: "AAVE",
-      description: "Repay the Loan",
-      method: "Repay",
-      token: "DAI",
-      amount: "1",
-      logo: "https://assets-stg.transak.com/images/cryptoCurrency/dai_small.png",
-    },
+    // {
+    //   id: 3,
+    //   name: "AAVE",
+    //   description: "Repay the Loan",
+    //   method: "Repay",
+    //   token: "DAI",
+    //   amount: "1",
+    //   logo: "https://assets-stg.transak.com/images/cryptoCurrency/dai_small.png",
+    // },
   ];
 
   const tokenJson: any = tokensJson;

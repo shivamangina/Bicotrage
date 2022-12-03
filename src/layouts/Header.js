@@ -5,10 +5,14 @@ import { useWeb3AuthContext } from "../biconomy/contexts/SocialLoginContext";
 import { ellipseAddress } from "../biconomy/utils";
 
 const paths = [
-  // {
-  //   path: "/",
-  //   name: "Home"
-  // },
+  {
+    path: "/",
+    name: "Home"
+  },
+  {
+    path: "/about",
+    name: "About"
+  },
 ];
 
 
@@ -30,8 +34,8 @@ export default function Header() {
         <div className="relative flex flex-col md:flex-row">
           <Link to="/" className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0">
             <span className="mx-auto ml-0 text-xl font-black leading-none text-pink-500 select-none">
-              Flash
-              <span className="w-full text-transparent bg-clip-text bg-gradient-to-r from-indigo-400  to-purple-700 lg:inline">Loans</span>
+              Bico
+              <span className="w-full text-transparent bg-clip-text bg-gradient-to-r from-indigo-400  to-purple-700 lg:inline">Trage</span>
               <span className="text-indigo-600">.</span>
             </span>
           </Link>
