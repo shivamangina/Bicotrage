@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
-import AddStep from "./pages/AddStep";
+import About from "./pages/About";
 
 import Header from "./layouts/Header";
 
@@ -13,7 +13,7 @@ const Routing: React.FC = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/test" element={<AddStep />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </BrowserRouter>
     </div>
