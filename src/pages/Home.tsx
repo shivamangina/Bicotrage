@@ -2,14 +2,15 @@
 import React, { useEffect, useState, Fragment } from "react";
 import Card from "./Card";
 import Stepper from "./Stepper";
-import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { PlusIcon } from '@heroicons/react/20/solid'
+import { Dialog, Transition } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/20/solid";
 import { RestRelayer } from "@biconomy/relayer";
 import { useWeb3AuthContext } from "../biconomy/contexts/SocialLoginContext";
 import { useSmartAccountContext } from "../biconomy/contexts/SmartAccountContext";
 import { approveTransaction } from "../utils/approveTransaction";
-import { uniswapTransaction } from "../utils/uniswapTransaction";
+import { buildUniswapTransaction } from "../utils/uniswapTransaction";
+import { batchTransaction } from "../utils/batchTransaction";
 
 function Home() {
   const initialSteps = [
@@ -21,7 +22,7 @@ function Home() {
       method: "Borrow",
       token: "USDC",
       amount: 1000,
-      logo: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png"
+      logo: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
     },
     {
       id: 2,
@@ -31,7 +32,7 @@ function Home() {
       method: "Swap",
       token: "ETH",
       amount: 1000,
-      logo: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png"
+      logo: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png",
     },
     {
       id: 3,
@@ -40,80 +41,80 @@ function Home() {
       method: "Repay",
       token: "ETH",
       amount: 1000,
-      logo: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png"
+      logo: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png",
     },
-  ]
+  ];
 
   const initialTokens = [
     {
-      "coinId": "ethereum",
-      "address": "0x0000000000000000000000000000000000000000",
-      "decimals": 18,
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_thumb.png"
+      coinId: "ethereum",
+      address: "0x0000000000000000000000000000000000000000",
+      decimals: 18,
+      image: {
+        large: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_large.png",
+        small: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png",
+        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_thumb.png",
       },
-      "name": "Ethereum",
-      "symbol": "ETH",
-      "network": {
-        "name": "ethereum",
-        "chainId": "5"
+      name: "Ethereum",
+      symbol: "ETH",
+      network: {
+        name: "ethereum",
+        chainId: "5",
       },
-      "uniqueId": "ETHethereum",
+      uniqueId: "ETHethereum",
     },
     {
-      "coinId": "tether",
-      "address": "0x466DD1e48570FAA2E7f69B75139813e4F8EF75c2",
-      "decimals": 18,
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/tether_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/tether_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/tether_thumb.png"
+      coinId: "tether",
+      address: "0x466DD1e48570FAA2E7f69B75139813e4F8EF75c2",
+      decimals: 18,
+      image: {
+        large: "https://assets-stg.transak.com/images/cryptoCurrency/tether_large.png",
+        small: "https://assets-stg.transak.com/images/cryptoCurrency/tether_small.png",
+        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/tether_thumb.png",
       },
-      "name": "Tether",
-      "symbol": "USDT",
-      "network": {
-        "name": "polygon",
-        "chainId": "80001"
+      name: "Tether",
+      symbol: "USDT",
+      network: {
+        name: "polygon",
+        chainId: "80001",
       },
-      "uniqueId": "USDTpolygon",
+      uniqueId: "USDTpolygon",
     },
     {
-      "coinId": "usd-coin",
-      "address": "0xBC301D905Ccee51Dd9e7b60Bb807aCC69bD00913",
-      "decimals": 18,
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_thumb.png"
+      coinId: "usd-coin",
+      address: "0xBC301D905Ccee51Dd9e7b60Bb807aCC69bD00913",
+      decimals: 18,
+      image: {
+        large: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
+        small: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
+        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_thumb.png",
       },
-      "name": "USD Coin",
-      "symbol": "USDC",
-      "network": {
-        "name": "polygon",
-        "chainId": "80001"
+      name: "USD Coin",
+      symbol: "USDC",
+      network: {
+        name: "polygon",
+        chainId: "80001",
       },
-      "uniqueId": "USDCpolygon",
+      uniqueId: "USDCpolygon",
     },
     {
-      "coinId": "matic-network",
-      "address": "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0",
-      "decimals": 18,
-      "image": {
-        "large": "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_large.png",
-        "small": "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_small.png",
-        "thumb": "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_thumb.png"
+      coinId: "matic-network",
+      address: "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0",
+      decimals: 18,
+      image: {
+        large: "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_large.png",
+        small: "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_small.png",
+        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_thumb.png",
       },
-      "name": "Polygon",
-      "symbol": "MATIC",
-      "network": {
-        "name": "polygon",
-        "chainId": "80001"
+      name: "Polygon",
+      symbol: "MATIC",
+      network: {
+        name: "polygon",
+        chainId: "80001",
       },
-      "uniqueId": "MATICpolygon",
-    }
-  ]
+      uniqueId: "MATICpolygon",
+    },
+  ];
 
   const people = [
     {
@@ -135,15 +136,14 @@ function Home() {
         {
           description: "Swap your currency",
           method: "Swap",
-        }
-      ]
-    }
+        },
+      ],
+    },
+  ];
 
-  ]
-
-  const [open, setOpen] = useState(false)
-  const [steps, setSteps] = useState(initialSteps)
-  const [tokens, setTokens] = useState(initialTokens)
+  const [open, setOpen] = useState(false);
+  const [steps, setSteps] = useState(initialSteps);
+  const [tokens, setTokens] = useState(initialTokens);
   const { provider, web3Provider } = useWeb3AuthContext();
   const { state: walletState, wallet } = useSmartAccountContext();
   const [txnArray, setTxnArray] = useState([]);
@@ -158,13 +158,15 @@ function Home() {
       console.log("Relayer is set");
       wallet.setRelayer(relayer);
 
-      wallet.getAlltokenBalances({
-        chainId: 5, // chainId of your choice
-        eoaAddress: wallet.address,
-        tokenAddresses: ["0x0000000000000000000000000000000000000000","0x326C977E6efc84E512bB9C30f76E30c160eD06FB"],
-      }).then((balance) => {
-        console.log("balance", balance);
-      });
+      wallet
+        .getAlltokenBalances({
+          chainId: 5, // chainId of your choice
+          eoaAddress: wallet.address,
+          tokenAddresses: ["0x0000000000000000000000000000000000000000", "0x326C977E6efc84E512bB9C30f76E30c160eD06FB"],
+        })
+        .then((balance) => {
+          console.log("balance", balance);
+        });
     }
   }, [wallet]);
 
@@ -172,23 +174,24 @@ function Home() {
     console.log("Execute");
     console.log(steps, "steps");
 
+    if (!wallet) return;
+
     const txs = [];
 
     // b0rrow
 
     // approve transaction
-    const txAppApprove = approveTransaction(web3Provider,"chainlink","2");
+    const txAppApprove = approveTransaction(web3Provider, "chainlink", "2");
     txs.push(txAppApprove);
 
-    const swapTx = swapTransaction(web3Provider,"chainlink","2","0x326C977E6efc84E512bB9C30f76E30c160eD06FB");
-
-
-
     // swaps
+    const swapTx = buildUniswapTransaction(web3Provider, wallet.address, "chainlink", "dai", "2");
+    txs.push(swapTx);
 
     // repay
 
     // batch transaction
+
   };
 
   const addNewStep = (name: string, method: string, description: string) => {
@@ -203,37 +206,36 @@ function Home() {
       amount: 1000,
       logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
     };
-    setSteps([...steps, newStep])
-    setOpen(false)
-  }
+    setSteps([...steps, newStep]);
+    setOpen(false);
+  };
 
   const openModal = () => {
     setOpen(true);
   };
 
   const updateStepToken = (token: string, id: number) => {
-    const selectedToken: any = tokens.find(tok => tok.symbol === token)
-    const newSteps: any = steps.map(one => {
+    const selectedToken: any = tokens.find((tok) => tok.symbol === token);
+    const newSteps: any = steps.map((one) => {
       if (one.id === id) {
         one.token = selectedToken.symbol;
-        one.logo = selectedToken.image.small
+        one.logo = selectedToken.image.small;
       }
-      return one
+      return one;
     });
-    setSteps([...newSteps])
+    setSteps([...newSteps]);
     console.log(selectedToken, newSteps);
-
-  }
+  };
 
   const updateStepAmount = (amount: number, id: number) => {
-    const newSteps: any = steps.map(one => {
+    const newSteps: any = steps.map((one) => {
       if (one.id === id) {
         one.amount = amount;
       }
-      return one
+      return one;
     });
-    setSteps([...newSteps])
-  }
+    setSteps([...newSteps]);
+  };
 
   return (
     <>
@@ -370,4 +372,3 @@ export default Home;
 function swapTransaction(web3Provider: import("@ethersproject/providers").Web3Provider | null, arg1: string, arg2: string, arg3: string) {
   throw new Error("Function not implemented.");
 }
-
