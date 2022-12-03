@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React from "react";
+import { TrashIcon } from '@heroicons/react/20/solid'
 
 export default function Example(data: any) {
-    const { steps, tokens, updateStepToken, updateStepAmount } = data
+    const { steps, tokens, updateStepToken, updateStepAmount, deleteStep } = data
     return (
         <ul role="list" className="grid grid-cols-1 gap-4 sm:grid-cols-1 mb-7">
             {steps.map((step: any) => (
@@ -16,6 +17,16 @@ export default function Example(data: any) {
                                 </span>
                             </div>
                             <p className="mt-1 truncate text-sm text-gray-500">{step.description}</p>
+                        </div>
+                        <div className="flex-shrink-0 pr-2">
+                            <button
+                                type="button"
+                                onClick={(e) => deleteStep(step.id)}
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                                <span className="sr-only">Open options</span>
+                                <TrashIcon className="h-5 w-5" aria-hidden="true" />
+                            </button>
                         </div>
                     </div>
                     <div className="mt-2">
@@ -63,6 +74,7 @@ export default function Example(data: any) {
                             </p>
                         </div>
                     </div>
+
                 </li>
             ))}
         </ul>

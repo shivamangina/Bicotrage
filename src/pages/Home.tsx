@@ -237,6 +237,12 @@ function Home() {
     setSteps([...newSteps]);
   };
 
+  const deleteStep = (id: number) => {
+    let newSteps = steps;
+    newSteps.splice(newSteps.findIndex(a => a.id === id), 1)
+    setSteps([...newSteps]);
+  };
+
   return (
     <>
       <section className="px-2 bg-white md:px-0">
@@ -256,7 +262,7 @@ function Home() {
             <div className="container items-center">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 m-6">
                 <Stepper steps={steps} />
-                <Card steps={steps} tokens={tokens} updateStepToken={updateStepToken} updateStepAmount={updateStepAmount} />
+                <Card steps={steps} tokens={tokens} updateStepToken={updateStepToken} updateStepAmount={updateStepAmount} deleteStep={deleteStep} />
               </div>
             </div>
           </div>
