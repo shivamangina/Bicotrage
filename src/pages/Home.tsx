@@ -12,6 +12,7 @@ import { approveTransaction } from "../utils/approveTransaction";
 import { buildUniswapTransaction } from "../utils/uniswapTransaction";
 import { batchTransaction } from "../utils/batchTransaction";
 import tokensJson from "../biconomy/utils/configs/contractsInfo.json";
+import SmartAccount from "@biconomy/smart-account";
 
 function Home() {
   const initialSteps = [
@@ -22,7 +23,7 @@ function Home() {
       status: "complete",
       method: "Borrow",
       token: "USDC",
-      amount: 1000,
+      amount: "1",
       logo: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
     },
     {
@@ -31,9 +32,11 @@ function Home() {
       description: "Swap your currency",
       status: "current",
       method: "Swap",
-      token: "DAI",
-      amount: 1000,
-      logo: "https://assets-stg.transak.com/images/cryptoCurrency/dai_small.png",
+      fromToken: "USDC",
+      toToken: "DAI",
+      amount: "1",
+      fromLogo: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
+      toLogo: "https://assets-stg.transak.com/images/cryptoCurrency/dai_small.png",
     },
     {
       id: 3,
@@ -41,7 +44,7 @@ function Home() {
       description: "Repay the Loan",
       method: "Repay",
       token: "DAI",
-      amount: 1000,
+      amount: "1",
       logo: "https://assets-stg.transak.com/images/cryptoCurrency/dai_small.png",
     },
   ];
@@ -77,9 +80,9 @@ function Home() {
   const [open, setOpen] = useState(false);
   const [steps, setSteps] = useState(initialSteps);
   const [tokens, setTokens] = useState(initialTokens);
-  const { provider, web3Provider } = useWeb3AuthContext();
-  const { state: walletState, wallet } = useSmartAccountContext();
-  const [txnArray, setTxnArray] = useState([]);
+  const { web3Provider } = useWeb3AuthContext();
+  const { wallet } = useSmartAccountContext();
+  // const [txnArray, setTxnArray] = useState([]);
 
   useEffect(() => {
     const relayer = new RestRelayer({
@@ -111,19 +114,46 @@ function Home() {
     const txs = [];
 
     // approve transaction
-    const txAppApprove = await approveTransaction(web3Provider, "chainlink", "1" , 18);
+    const txAppApprove = await approveTransaction(web3Provider, "chainlink", "1", 18);
     console.log("txAppApprove: ", txAppApprove);
     txs.push(txAppApprove);
 
     // swaps
-    const swapTx = await buildUniswapTransaction(web3Provider, wallet.address, tokensJson.chainlink, tokenJson.dai, "1");
-    console.log("swapTx: ", swapTx);
-    txs.push(swapTx);
+    const exchangeTxns = await exchangeTransactions(wallet);
+    console.log(exchangeTxns, "exchangeTxns");
+    txs.push(exchangeTxns)
 
     // batch transaction
     const txHash = await batchTransaction(txs, wallet);
     console.log("txHash: ", txHash);
   };
+
+  const findTokenBySymbol = async (symbol: string) => {
+    const token = tokens.find((tok: any) => tok.symbol === symbol);
+    return token;
+  }
+
+  const exchangeTransactions = async (wallet: SmartAccount) => {
+    const stepsBatch: any = steps;
+    const exchangeTxs = [];
+    for (let i = 0; i < stepsBatch.length; i++) {
+      const batch = stepsBatch[i];
+      if (batch && batch.name === "UniSwap") {
+        console.log("UniSwap Adding batch Txn", batch);
+        const tokenFromSwap = await findTokenBySymbol(batch.fromToken);
+        const tokenToSwap = await findTokenBySymbol(batch.toToken);
+        const swapTx = await buildUniswapTransaction(web3Provider, wallet.address, tokenFromSwap, tokenToSwap, batch.amount.toString());
+        console.log("swapTx: ", swapTx);
+        return exchangeTxs.push(swapTx);
+      }
+      if (batch && batch.name === "AAVE") {
+        console.log("AAVE Adding batch Txn", batch.id);
+        // const swapTx = await buildUniswapTransaction(web3Provider, wallet.address, tokenJson.chainlink, tokenJson.dai, "1");
+        // console.log("swapTx: ", swapTx);
+        // return exchangeTxs.push(swapTx);
+      }
+    }
+  }
 
   const addNewStep = (name: string, method: string, description: string) => {
     const newStep = {
@@ -133,7 +163,7 @@ function Home() {
       method,
       status: "",
       token: "USDC",
-      amount: 1000,
+      amount: "1",
       logo: "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389",
     };
     setSteps([...steps, newStep]);
@@ -144,12 +174,24 @@ function Home() {
     setOpen(true);
   };
 
-  const updateStepToken = (token: string, id: number) => {
+  const updateStepToken = (token: string, id: number, isSwap: boolean, isFromOrTwo: string) => {
+    console.log(token, id, isSwap, isFromOrTwo);
+
     const selectedToken: any = tokens.find((tok: any) => tok.symbol === token);
     const newSteps: any = steps.map((one) => {
       if (one.id === id) {
-        one.token = selectedToken.symbol;
-        one.logo = selectedToken.image.small;
+        if (isSwap && isFromOrTwo === "from") {
+          one.fromLogo = selectedToken.image.small;
+          one.fromToken = selectedToken.symbol;
+        }
+        if (isSwap && isFromOrTwo === "to") {
+          one.toLogo = selectedToken.image.small;
+          one.toToken = selectedToken.symbol;
+        }
+        else {
+          one.logo = selectedToken.image.small;
+          one.token = selectedToken.symbol;
+        }
       }
       return one;
     });
@@ -157,7 +199,7 @@ function Home() {
     console.log(selectedToken, newSteps);
   };
 
-  const updateStepAmount = (amount: number, id: number) => {
+  const updateStepAmount = (amount: string, id: number) => {
     const newSteps: any = steps.map((one) => {
       if (one.id === id) {
         one.amount = amount;
