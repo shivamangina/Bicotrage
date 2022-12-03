@@ -1,65 +1,32 @@
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React from "react";
-import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/20/solid'
 
-const people = [
-    {
-        name: 'Jane Cooper',
-        title: 'Regional Paradigm Technician',
-        role: 'Admin',
-        email: 'janecooper@example.com',
-        telephone: '+1-202-555-0170',
-        imageUrl:
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-    },
-    {
-        name: 'Jane Cooper',
-        title: 'Regional Paradigm Technician',
-        role: 'Admin',
-        email: 'janecooper@example.com',
-        telephone: '+1-202-555-0170',
-        imageUrl:
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-    },
-]
-
-const App: React.FC = () => {
+export default function Example(data: any) {
+    const { steps } = data
     return (
         <ul role="list" className="grid grid-cols-1 gap-4 sm:grid-cols-1 mb-7">
-            {people.map((person) => (
-                <li key={person.email} className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow">
-                    <div className="flex w-full items-center justify-between space-x-6 p-6">
+            {steps.map((step: any) => (
+                <li key={step.email} className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow">
+                    <div className="flex w-full items-center justify-between space-x-6 p-6 bg-blue">
                         <div className="flex-1 truncate">
                             <div className="flex items-center space-x-3">
-                                <h3 className="truncate text-sm font-medium text-gray-900">{person.name}</h3>
-                                <span className="inline-block flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
-                                    {person.role}
+                                <h3 className="truncate text-lg font-medium text-gray-900">{step.name}</h3>
+                                <span className="flex-shrink-0  px-2 py-0.3 mb-1 text-base  leading-6 text-white bg-purple-600 rounded-md sm:mb-0 hover:bg-indigo-700 ">
+                                    {step.method}
                                 </span>
                             </div>
-                            <p className="mt-1 truncate text-sm text-gray-500">{person.title}</p>
+                            <p className="mt-1 truncate text-sm text-gray-500">{step.description}</p>
                         </div>
-                        <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={person.imageUrl} alt="" />
                     </div>
-                    <div>
-                        <div className="-mt-px flex divide-x divide-gray-200">
-                            <div className="flex w-0 flex-1">
-                                <a
-                                    href={`mailto:${person.email}`}
-                                    className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500"
-                                >
-                                    <EnvelopeIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                                    <span className="ml-3">Email</span>
-                                </a>
-                            </div>
-                            <div className="-ml-px flex w-0 flex-1">
-                                <a
-                                    href={`tel:${person.telephone}`}
-                                    className="relative inline-flex w-0 flex-1 items-center justify-center rounded-br-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500"
-                                >
-                                    <PhoneIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                                    <span className="ml-3">Call</span>
-                                </a>
-                            </div>
+                    <div className="mt-2">
+                        <div className="container flex flex-col flex-wrap items-center justify-between  mx-auto md:flex-row ">
+                            <p className="inline-flex items-center ml-1 space-x-5 text-sm text-gray-500 lg:justify-start">
+                                <img className="h-7 w-7 flex-shrink-0 rounded-full bg-gray-300 mr-2" src={step.logo} alt="" /> {""}
+                                {step.token}
+                            </p>
+                            <p className="inline-flex items-center ml-1 space-x-5 text-sm text-gray-500 lg:justify-end">
+                                {step.amount}
+                            </p>
                         </div>
                     </div>
                 </li>
@@ -67,5 +34,3 @@ const App: React.FC = () => {
         </ul>
     )
 }
-
-export default App;
