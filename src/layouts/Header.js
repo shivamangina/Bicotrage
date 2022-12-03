@@ -5,10 +5,10 @@ import { useWeb3AuthContext } from "../biconomy/contexts/SocialLoginContext";
 import { ellipseAddress } from "../biconomy/utils";
 
 const paths = [
-  {
-    path: "/",
-    name: "Home"
-  },
+  // {
+  //   path: "/",
+  //   name: "Home"
+  // },
 ];
 
 
