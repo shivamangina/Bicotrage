@@ -19,8 +19,6 @@ Github : <a style="margin-bottom: 5px;" href="https://github.com/shivamangina/et
 
 Video : <a style="margin-bottom: 5px;" href="https://github.com/shivamangina/ethindia-2022" target="_blank"> Youtube Link </a>
 
-Live Demo : <a style="margin-bottom: 5px;" href="https://github.com/shivamangina/ethindia-2022" target="_blank"> Website URL </a>
-
 ## Problem
 
 ## Solution
@@ -36,6 +34,8 @@ Live Demo : <a style="margin-bottom: 5px;" href="https://github.com/shivamangina
       <br>
 
 # Architecture
+
+<img src="./src/assets/archi.png" />
 
 <br>
 
