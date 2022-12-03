@@ -11,6 +11,7 @@ import { useSmartAccountContext } from "../biconomy/contexts/SmartAccountContext
 import { approveTransaction } from "../utils/approveTransaction";
 import { buildUniswapTransaction } from "../utils/uniswapTransaction";
 import { batchTransaction } from "../utils/batchTransaction";
+import tokensJson from "../biconomy/utils/configs/contractsInfo.json";
 
 function Home() {
   const initialSteps = [
@@ -30,91 +31,23 @@ function Home() {
       description: "Swap your currency",
       status: "current",
       method: "Swap",
-      token: "ETH",
+      token: "DAI",
       amount: 1000,
-      logo: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png",
+      logo: "https://assets-stg.transak.com/images/cryptoCurrency/dai_small.png",
     },
     {
       id: 3,
       name: "AAVE",
       description: "Repay the Loan",
       method: "Repay",
-      token: "ETH",
+      token: "DAI",
       amount: 1000,
-      logo: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png",
+      logo: "https://assets-stg.transak.com/images/cryptoCurrency/dai_small.png",
     },
   ];
 
-  const initialTokens = [
-    {
-      coinId: "ethereum",
-      address: "0x0000000000000000000000000000000000000000",
-      decimals: 18,
-      image: {
-        large: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_large.png",
-        small: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_small.png",
-        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/ethereum_thumb.png",
-      },
-      name: "Ethereum",
-      symbol: "ETH",
-      network: {
-        name: "ethereum",
-        chainId: "5",
-      },
-      uniqueId: "ETHethereum",
-    },
-    {
-      coinId: "tether",
-      address: "0x466DD1e48570FAA2E7f69B75139813e4F8EF75c2",
-      decimals: 18,
-      image: {
-        large: "https://assets-stg.transak.com/images/cryptoCurrency/tether_large.png",
-        small: "https://assets-stg.transak.com/images/cryptoCurrency/tether_small.png",
-        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/tether_thumb.png",
-      },
-      name: "Tether",
-      symbol: "USDT",
-      network: {
-        name: "polygon",
-        chainId: "80001",
-      },
-      uniqueId: "USDTpolygon",
-    },
-    {
-      coinId: "usd-coin",
-      address: "0xBC301D905Ccee51Dd9e7b60Bb807aCC69bD00913",
-      decimals: 18,
-      image: {
-        large: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_large.png",
-        small: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_small.png",
-        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/usd-coin_thumb.png",
-      },
-      name: "USD Coin",
-      symbol: "USDC",
-      network: {
-        name: "polygon",
-        chainId: "80001",
-      },
-      uniqueId: "USDCpolygon",
-    },
-    {
-      coinId: "matic-network",
-      address: "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0",
-      decimals: 18,
-      image: {
-        large: "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_large.png",
-        small: "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_small.png",
-        thumb: "https://assets-stg.transak.com/images/cryptoCurrency/matic-network_thumb.png",
-      },
-      name: "Polygon",
-      symbol: "MATIC",
-      network: {
-        name: "polygon",
-        chainId: "80001",
-      },
-      uniqueId: "MATICpolygon",
-    },
-  ];
+  const tokenJson: any = tokensJson;
+  const initialTokens: any = Object.keys(tokenJson).map((key) => tokenJson[key]);
 
   const people = [
     {
@@ -195,7 +128,6 @@ function Home() {
   };
 
   const addNewStep = (name: string, method: string, description: string) => {
-    console.log("Add New Step");
     const newStep = {
       id: steps.length + 1,
       name,
@@ -215,7 +147,7 @@ function Home() {
   };
 
   const updateStepToken = (token: string, id: number) => {
-    const selectedToken: any = tokens.find((tok) => tok.symbol === token);
+    const selectedToken: any = tokens.find((tok: any) => tok.symbol === token);
     const newSteps: any = steps.map((one) => {
       if (one.id === id) {
         one.token = selectedToken.symbol;
