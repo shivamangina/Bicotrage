@@ -7,7 +7,7 @@
 <br>
 
 <br>
-
+ 
 ## Demo
 
 <br>
@@ -17,7 +17,7 @@
 
 Github : <a style="margin-bottom: 5px;" href="https://github.com/shivamangina/ethindia-2022" target="_blank"> Repo Link </a>
 
-Video : <a style="margin-bottom: 5px;" href="https://github.com/shivamangina/ethindia-2022" target="_blank"> Youtube Link </a>
+Video : <a style="margin-bottom: 5px;" href="https://www.youtube.com/watch?v=ZItkM2ZDX4o" target="_blank"> Youtube Link </a>
 
 ## Problem
 
