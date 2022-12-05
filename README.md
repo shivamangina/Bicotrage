@@ -1,5 +1,7 @@
 # ETHIndia 2022 Hackathon
 
+we won 🏆 𝟮𝗻𝗱 𝗶𝗻 𝘁𝗵𝗲 𝗕𝗶𝗰𝗼𝗻𝗼𝗺𝘆 𝗽𝗮𝗿𝘁𝗻𝗲𝗿 𝗽𝗿𝗶𝘇𝗲 for "Best transaction batch using Biconomy SDK" in #ETHIndia 
+
 ## BicoTrage - An Arbitrage Platform Developed using Biconomy
 
 <br>
