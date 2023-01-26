@@ -5,14 +5,31 @@ import { useWeb3AuthContext } from "../biconomy/contexts/SocialLoginContext";
 import { ellipseAddress } from "../biconomy/utils";
 
 const paths = [
+  // {
+  //   path: "/",
+  //   name: "Home",
+  //   type: "route"
+  // },
   {
-    path: "/",
-    name: "Home"
+    path: "/team",
+    name: "Team",
+    type: "route"
   },
   {
-    path: "/about",
-    name: "About"
+    path: "https://github.com/shivamangina/Bicotrage",
+    name: "Github",
+    type: "link"
   },
+  {
+    path: "https://www.youtube.com/watch?v=ZItkM2ZDX4o",
+    name: "Demo",
+    type: "link"
+  },
+  {
+    path: "https://www.youtube.com/watch?v=ZItkM2ZDX4o",
+    name: "About",
+    type: "link"
+  }
 ];
 
 
@@ -41,10 +58,14 @@ export default function Header() {
           </Link>
           <nav className="flex flex-wrap items-center mb-5 text-base md:mb-0 md:pl-8 md:ml-8 md:border-l md:border-gray-200">
             {paths &&
-              paths.map(({ path, name }) => (
-                <Link key={path + name} to={path} className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
-                  {name}
-                </Link>
+              paths.map(({ path, name, type }) => (
+                type === "route" ?
+                  <Link key={path + name} to={path} className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+                    {name}
+                  </Link> :
+                  <a key={path + name} href={path} target="_blank" rel="noreferrer" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+                    {name}
+                  </a>
               ))}
           </nav>
         </div>

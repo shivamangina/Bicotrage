@@ -54,7 +54,7 @@ function Home() {
   const tokenJson: any = tokensJson;
   const initialTokens: any = Object.keys(tokenJson).map((key) => {
     const item = tokenJson[key];
-    item.key = key
+    item.key = key;
     return item;
   });
 
@@ -85,9 +85,10 @@ function Home() {
 
   const [open, setOpen] = useState(false);
   const [steps, setSteps] = useState(initialSteps);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [tokens, setTokens] = useState(initialTokens);
   const { web3Provider } = useWeb3AuthContext();
-  const { wallet } = useSmartAccountContext();
+  const { wallet, selectedAccount } = useSmartAccountContext();
   // const [txnArray, setTxnArray] = useState([]);
 
   useEffect(() => {
@@ -120,7 +121,7 @@ function Home() {
       // swaps
       const exchangeTxns = await exchangeTransactions(wallet);
       console.log(exchangeTxns, "exchangeTxns");
-      txs.push(...exchangeTxns)
+      txs.push(...exchangeTxns);
 
       // batch transaction
       const txHash = await batchTransaction(txs, wallet);
@@ -133,7 +134,7 @@ function Home() {
   const findTokenBySymbol = async (symbol: string) => {
     const token = tokens.find((tok: any) => tok.symbol === symbol);
     return token;
-  }
+  };
 
   const exchangeTransactions = async (wallet: SmartAccount) => {
     const stepsBatch: any = steps;
@@ -158,11 +159,10 @@ function Home() {
       if (batch && batch.name === "AAVE") {
         console.log("AAVE Adding batch Txn", batch.id);
         // Todo
-
       }
     }
     return exchangeTxs;
-  }
+  };
 
   const addNewStep = (name: string, method: string, description: string) => {
     const newStep: any = {
@@ -174,14 +174,14 @@ function Home() {
       amount: "1",
     };
     if (name === "UniSwap") {
-      newStep.fromToken = "DAI"
-      newStep.fromLogo = "https://assets-stg.transak.com/images/cryptoCurrency/dai_small.png"
-      newStep.toToken = "WETH"
-      newStep.toLogo = "https://assets-stg.transak.com/images/cryptoCurrency/weth_small.jpg"
+      newStep.fromToken = "DAI";
+      newStep.fromLogo = "https://assets-stg.transak.com/images/cryptoCurrency/dai_small.png";
+      newStep.toToken = "WETH";
+      newStep.toLogo = "https://assets-stg.transak.com/images/cryptoCurrency/weth_small.jpg";
     }
     if (name === "Aave") {
-      newStep.token = "WETH"
-      newStep.logo = "https://assets-stg.transak.com/images/cryptoCurrency/weth_small.jpg"
+      newStep.token = "WETH";
+      newStep.logo = "https://assets-stg.transak.com/images/cryptoCurrency/weth_small.jpg";
     }
     setSteps([...steps, newStep]);
     setOpen(false);
@@ -204,8 +204,7 @@ function Home() {
         if (isSwap && isFromOrTwo === "to") {
           one.toLogo = selectedToken.image.small;
           one.toToken = selectedToken.symbol;
-        }
-        else {
+        } else {
           one.logo = selectedToken.image.small;
           one.token = selectedToken.symbol;
         }
@@ -262,8 +261,13 @@ function Home() {
             <span className="relative inline-flex w-full md:w-auto">
               <button
                 onClick={onExecute}
+                disabled={selectedAccount && selectedAccount.smartAccountAddress ? false : true}
                 type="button"
-                className="inline-flex items-center justify-center w-full px-6 py-2 text-base font-bold leading-6 text-white bg-green-600 border border-transparent rounded-md md:w-auto hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
+                className={
+                  selectedAccount && selectedAccount.smartAccountAddress
+                    ? "inline-flex items-center justify-center w-full px-6 py-2 text-base font-bold leading-6 text-white bg-green-600 border border-transparent rounded-md md:w-auto hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                    : "inline-flex items-center justify-center w-full px-6 py-2 text-base font-bold leading-6 text-black bg-white-600 border border-gray-400 rounded-md md:w-auto"
+                }>
                 Execute
               </button>
             </span>
@@ -367,4 +371,3 @@ function Home() {
 }
 
 export default Home;
-
