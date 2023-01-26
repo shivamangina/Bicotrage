@@ -26,7 +26,7 @@ const paths = [
     type: "link"
   },
   {
-    path: "https://www.youtube.com/watch?v=ZItkM2ZDX4o",
+    path: `${window.location.origin}/pitch-deck.pdf`,
     name: "About",
     type: "link"
   }
